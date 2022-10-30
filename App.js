@@ -7,9 +7,10 @@ export default function App() {
   const [minutes, setMinutes] = useState(0);
   const [hours, setHours] = useState(0);
   const [customInterval, setCustomInterval] = useState();
-
+  const [isStarted, setIsStarted] = useState(false);
   //setInterval fonction tab9a t3awed f fonction bel milliseconds
   const startTimer = () => {
+    setIsStarted(true);
     setCustomInterval(
       setInterval(() => {
         changeTime();
@@ -20,6 +21,7 @@ export default function App() {
   //ta3ml pause ll fonction mta3 l interval => yahbes l wa9t ma 3adch ta3ml +1
   const stopTimer = () => {
     clearInterval(customInterval);
+    setIsStarted(false);
   };
 
   //reset ll wa9t yarj3 lkol 00
@@ -46,10 +48,6 @@ export default function App() {
       return prevState + 1;
     });
   };
-  //disable start button after it's been clicked
-  const [startDisabled, setStartDisabled] = useState(false);
-  const [stopDisabled, setStopDisabled] = useState(true);
-  const [clearDisabled, setClearDisabled] = useState(true);
 
   return (
     <View style={styles.container}>
@@ -60,7 +58,11 @@ export default function App() {
         {seconds < 10 ? "0" + seconds : seconds}
       </Text>
       <View style={styles.buttonContainer}>
-        <Button title="Start" onPress={startTimer} />
+        <Button
+          title="Start"
+          disabled={isStarted ? true : false}
+          onPress={startTimer}
+        />
         <Button title="Pause" disabled={seconds === 0} onPress={stopTimer} />
         <Button title="Reset" disabled={seconds === 0} onPress={clear} />
       </View>
