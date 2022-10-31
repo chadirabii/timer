@@ -3,14 +3,18 @@ import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
 export default function App() {
-  const [seconds, setSeconds] = useState(0);
+  const [seconds, setSeconds] = useState(55);
   const [minutes, setMinutes] = useState(0);
   const [hours, setHours] = useState(0);
   const [customInterval, setCustomInterval] = useState();
   const [isStarted, setIsStarted] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isReseted, setIsReseted] = useState(false);
   //setInterval fonction tab9a t3awed f fonction bel milliseconds
   const startTimer = () => {
     setIsStarted(true);
+    setIsPaused(false);
+    setIsReseted(false);
     setCustomInterval(
       setInterval(() => {
         changeTime();
@@ -22,6 +26,7 @@ export default function App() {
   const stopTimer = () => {
     clearInterval(customInterval);
     setIsStarted(false);
+    setIsPaused(true);
   };
 
   //reset ll wa9t yarj3 lkol 00
@@ -30,6 +35,8 @@ export default function App() {
     setMinutes(0);
     setHours(0);
     clearInterval(customInterval);
+    setIsStarted(false);
+    setIsReseted(true);
   };
 
   //kn l seconds >60 => l minutes +1 w seconds =0 --- kifkif 3l hours kn minutes >60 => hours +1 w minutes =0
@@ -63,8 +70,23 @@ export default function App() {
           disabled={isStarted ? true : false}
           onPress={startTimer}
         />
-        <Button title="Pause" disabled={seconds === 0} onPress={stopTimer} />
-        <Button title="Reset" disabled={seconds === 0} onPress={clear} />
+        <Button
+          title="Pause"
+          disabled={
+            (seconds === 0 && minutes === 0 && hours === 0) ||
+            (isPaused ? true : false)
+          }
+          onPress={stopTimer}
+        />
+
+        <Button
+          title="Reset"
+          disabled={
+            (seconds === 0 && minutes === 0 && hours === 0) ||
+            (isReseted ? true : false)
+          }
+          onPress={clear}
+        />
       </View>
       <StatusBar style="auto" />
     </View>
